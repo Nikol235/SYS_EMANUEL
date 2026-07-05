@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { AttendanceRequest, AttendanceResponse } from './attendance.models';
+import { environment } from '../../../../environments/environment';
 
-const BASE = 'http://localhost:8080/api/attendance';
+const BASE = `${environment.apiUrl}/attendance`;
 
 @Injectable({ providedIn: 'root' })
 export class AttendanceApi {

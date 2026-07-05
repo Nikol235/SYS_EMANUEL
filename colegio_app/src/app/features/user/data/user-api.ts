@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserRequest, UserResponse } from './user.models';
+import { environment } from '../../../../environments/environment';
 
-const BASE = 'http://localhost:8080/api/users';
+const BASE = `${environment.apiUrl}/users`;
 
 @Injectable({ providedIn: 'root' })
 export class UserApi {

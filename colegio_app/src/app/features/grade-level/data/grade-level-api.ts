@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GradeLevelRequest, GradeLevelResponse } from './grade-level.models';
+import { environment } from '../../../../environments/environment';
 
-const BASE = 'http://localhost:8080/api/grade-levels';
+const BASE = `${environment.apiUrl}/grade-levels`;
 
 @Injectable({ providedIn: 'root' })
 export class GradeLevelApi {

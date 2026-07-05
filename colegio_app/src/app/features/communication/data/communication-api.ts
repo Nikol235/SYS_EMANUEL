@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommunicationPage, CommunicationRequest, CommunicationResponse } from './communication.models';
+import { environment } from '../../../../environments/environment';
 
-const BASE = 'http://localhost:8080/api/communications';
+const BASE = `${environment.apiUrl}/communications`;
 
 @Injectable({ providedIn: 'root' })
 export class CommunicationApi {

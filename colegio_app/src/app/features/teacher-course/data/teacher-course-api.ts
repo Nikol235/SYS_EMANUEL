@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TeacherCourseRequest, TeacherCourseResponse } from './teacher-course.models';
+import { environment } from '../../../../environments/environment';
 
-const BASE = 'http://localhost:8080/api/teacher-courses';
+const BASE = `${environment.apiUrl}/teacher-courses`;
 
 @Injectable({ providedIn: 'root' })
 export class TeacherCourseApi {

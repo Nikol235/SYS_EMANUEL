@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { PaymentRequest, PaymentResponse } from './payment.models';
+import { environment } from '../../../../environments/environment';
 
-const BASE = 'http://localhost:8080/api/payments';
+const BASE = `${environment.apiUrl}/payments`;
 
 @Injectable({ providedIn: 'root' })
 export class PaymentApi {

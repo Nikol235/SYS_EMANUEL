@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { HttpClient } from '@angular/common/http';
 import { AuthState } from '../../../../core/auth-state';
+import { environment } from '../../../../../environments/environment';
 
-const BASE = 'http://localhost:8080/api/dashboard';
+const BASE = `${environment.apiUrl}/dashboard`;
 
 @Component({
   selector: 'app-dashboard',

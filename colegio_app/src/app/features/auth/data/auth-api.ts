@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthRequest, AuthResponse } from './auth.models';
+import { environment } from '../../../../environments/environment';
 
-const BASE = 'http://localhost:8080/api/auth';
+const BASE = `${environment.apiUrl}/auth`;
 
 @Injectable({ providedIn: 'root' })
 export class AuthApi {
