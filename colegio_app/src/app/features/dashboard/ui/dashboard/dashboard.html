@@ -1,0 +1,112 @@
+<div class="dashboard-wrapper">
+  <div class="page-header">
+    <h2>Dashboard</h2>
+    <span class="role-badge">{{ authState.$role() }}</span>
+  </div>
+
+  @if ($data(); as data) {
+    @if (authState.$role() === 'admin' || authState.$role() === 'director' || authState.$role() === 'secretaria') {
+      <div class="stats-grid">
+        <p-card>
+          <div class="stat-item">
+            <i class="pi pi-users stat-icon"></i>
+            <div>
+              <div class="stat-value">{{ data.totalStudents }}</div>
+              <div class="stat-label">Alumnos activos</div>
+            </div>
+          </div>
+        </p-card>
+        <p-card>
+          <div class="stat-item">
+            <i class="pi pi-user stat-icon"></i>
+            <div>
+              <div class="stat-value">{{ data.totalTeachers }}</div>
+              <div class="stat-label">Docentes</div>
+            </div>
+          </div>
+        </p-card>
+        <p-card>
+          <div class="stat-item">
+            <i class="pi pi-book stat-icon"></i>
+            <div>
+              <div class="stat-value">{{ data.totalCourses }}</div>
+              <div class="stat-label">Cursos</div>
+            </div>
+          </div>
+        </p-card>
+        <p-card>
+          <div class="stat-item">
+            <i class="pi pi-credit-card stat-icon warning"></i>
+            <div>
+              <div class="stat-value">{{ data.pendingPayments }}</div>
+              <div class="stat-label">Pagos pendientes</div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    }
+
+    @if (authState.$role() === 'docente') {
+      <div class="stats-grid">
+        <p-card>
+          <div class="stat-item">
+            <i class="pi pi-book stat-icon"></i>
+            <div>
+              <div class="stat-value">{{ data.totalCourses }}</div>
+              <div class="stat-label">Mis cursos</div>
+            </div>
+          </div>
+        </p-card>
+        <p-card>
+          <div class="stat-item">
+            <i class="pi pi-users stat-icon"></i>
+            <div>
+              <div class="stat-value">{{ data.totalStudents }}</div>
+              <div class="stat-label">Mis alumnos</div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    }
+
+    @if (authState.$role() === 'padre') {
+      <div class="stats-grid">
+        <p-card header="Mi Hijo/a">
+          <div class="stat-item">
+            <i class="pi pi-user stat-icon"></i>
+            <div>
+              <div class="stat-value">{{ data.student?.name }}</div>
+              <div class="stat-label">{{ data.student?.grade }} - {{ data.student?.section }}</div>
+            </div>
+          </div>
+        </p-card>
+        <p-card>
+          <div class="stat-item">
+            <i class="pi pi-star stat-icon"></i>
+            <div>
+              <div class="stat-value">{{ data.stats?.promedio }}</div>
+              <div class="stat-label">Promedio general</div>
+            </div>
+          </div>
+        </p-card>
+        <p-card>
+          <div class="stat-item">
+            <i class="pi pi-credit-card stat-icon warning"></i>
+            <div>
+              <div class="stat-value">{{ data.stats?.pagosPendientes }}</div>
+              <div class="stat-label">Pagos pendientes</div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    }
+  }
+
+  @if (!$data()) {
+    <div class="welcome">
+      <i class="pi pi-graduation-cap welcome-icon"></i>
+      <h3>Bienvenido, {{ authState.$fullName() }}</h3>
+      <p>Selecciona una opción del menú para continuar.</p>
+    </div>
+  }
+</div>

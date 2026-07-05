@@ -1,0 +1,68 @@
+.dashboard-wrapper {
+  max-width: 1200px;
+}
+
+.role-badge {
+  background: var(--p-primary-color);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  font-size: 2rem;
+  color: var(--p-primary-color);
+
+  &.warning {
+    color: var(--p-orange-500, #f97316);
+  }
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--p-text-color);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--p-text-muted-color);
+  margin-top: 0.25rem;
+}
+
+.welcome {
+  text-align: center;
+  padding: 4rem 2rem;
+
+  .welcome-icon {
+    font-size: 4rem;
+    color: var(--p-primary-color);
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: var(--p-text-muted-color);
+  }
+}
