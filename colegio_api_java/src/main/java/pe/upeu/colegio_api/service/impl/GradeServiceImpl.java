@@ -28,7 +28,15 @@ public class GradeServiceImpl implements GradeService {
     @Transactional(readOnly = true)
     public List<GradeResponseDTO> findAll(Long studentId, Long teacherCourseId, String username, String role) {
         List<Grade> grades;
-        if (studentId != null && teacherCourseId != null) {
+        if ("docente".equals(role)) {
+            Long teacherId = userRepository.findByUsername(username).map(u -> u.getId()).orElseThrow();
+            grades = gradeRepository.findByTeacherCourseTeacherId(teacherId);
+        } else if ("padre".equals(role)) {
+            Long parentId = userRepository.findByUsername(username).map(u -> u.getId()).orElseThrow();
+            grades = studentRepository.findByParentId(parentId).stream()
+                    .flatMap(s -> gradeRepository.findByStudentId(s.getId()).stream())
+                    .toList();
+        } else if (studentId != null && teacherCourseId != null) {
             grades = gradeRepository.findByStudentId(studentId).stream()
                     .filter(g -> g.getTeacherCourse().getId().equals(teacherCourseId))
                     .toList();
@@ -39,6 +47,12 @@ public class GradeServiceImpl implements GradeService {
         } else {
             grades = gradeRepository.findAll();
         }
+
+        if (("docente".equals(role) || "padre".equals(role))) {
+            if (studentId != null) grades = grades.stream().filter(g -> g.getStudent().getId().equals(studentId)).toList();
+            if (teacherCourseId != null) grades = grades.stream().filter(g -> g.getTeacherCourse().getId().equals(teacherCourseId)).toList();
+        }
+
         return grades.stream().map(gradeMapper::toResponseDTO).toList();
     }
 

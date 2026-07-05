@@ -11,6 +11,7 @@ import pe.edu.upeu.colegio_api.exception.AppException;
 import pe.edu.upeu.colegio_api.mapper.AttendanceMapper;
 import pe.edu.upeu.colegio_api.repository.AttendanceRepository;
 import pe.edu.upeu.colegio_api.repository.StudentRepository;
+import pe.edu.upeu.colegio_api.repository.UserRepository;
 import pe.edu.upeu.colegio_api.service.AttendanceService;
 
 import java.time.LocalDate;
@@ -23,18 +24,39 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
     private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
     private final AttendanceMapper attendanceMapper;
 
     @Override
     @Transactional(readOnly = true)
     public List<AttendanceResponseDTO> findAll(Long studentId, LocalDate date, String turno, String username, String role) {
+        List<Long> allowedStudentIds = null;
+        if ("docente".equals(role)) {
+            Long teacherId = userRepository.findByUsername(username).map(u -> u.getId()).orElseThrow();
+            allowedStudentIds = studentRepository.findByTeacherId(teacherId).stream().map(s -> s.getId()).toList();
+        } else if ("padre".equals(role)) {
+            Long parentId = userRepository.findByUsername(username).map(u -> u.getId()).orElseThrow();
+            allowedStudentIds = studentRepository.findByParentId(parentId).stream().map(s -> s.getId()).toList();
+        }
+
         List<Attendance> list;
         if (studentId != null) {
+            if (allowedStudentIds != null && !allowedStudentIds.contains(studentId)) {
+                throw new AppException(HttpStatus.FORBIDDEN, "No autorizado para ver este alumno");
+            }
             list = attendanceRepository.findByStudentIdOrderByDateDesc(studentId);
+            if (date != null) list = list.stream().filter(a -> a.getDate().equals(date)).toList();
+        } else if (allowedStudentIds != null) {
+            list = allowedStudentIds.stream()
+                    .flatMap(sid -> attendanceRepository.findByStudentIdOrderByDateDesc(sid).stream())
+                    .toList();
             if (date != null) list = list.stream().filter(a -> a.getDate().equals(date)).toList();
         } else {
             list = attendanceRepository.findAll();
         }
+
+        if (turno != null) list = list.stream().filter(a -> turno.equals(a.getTurno())).toList();
+
         return list.stream().map(attendanceMapper::toResponseDTO).toList();
     }
 
