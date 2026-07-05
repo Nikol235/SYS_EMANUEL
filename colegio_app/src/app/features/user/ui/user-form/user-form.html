@@ -1,0 +1,46 @@
+<p-toast />
+<div class="page-header">
+  <h2>{{ $editId() ? 'Editar' : 'Nuevo' }} Usuario</h2>
+</div>
+<div class="card-container form-container">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-grid">
+      <div class="field">
+        <label>Usuario *</label>
+        <input pInputText formControlName="username" class="w-full" />
+      </div>
+      <div class="field">
+        <label>Contraseña {{ $editId() ? '(dejar vacío para no cambiar)' : '*' }}</label>
+        <p-password formControlName="password" [feedback]="false" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full" />
+      </div>
+      <div class="field">
+        <label>Rol *</label>
+        <p-select formControlName="role" [options]="roleOptions" optionLabel="label" optionValue="value" styleClass="w-full" />
+      </div>
+      <div class="field">
+        <label>Nombre Completo</label>
+        <input pInputText formControlName="fullName" class="w-full" />
+      </div>
+      <div class="field">
+        <label>DNI</label>
+        <input pInputText formControlName="dni" class="w-full" maxlength="8" />
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input pInputText formControlName="email" class="w-full" type="email" />
+      </div>
+      <div class="field">
+        <label>Teléfono</label>
+        <input pInputText formControlName="phone" class="w-full" />
+      </div>
+      <div class="field">
+        <label>Activo</label>
+        <p-toggleswitch formControlName="active" />
+      </div>
+    </div>
+    <div class="form-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" (onClick)="cancel()" />
+      <p-button type="submit" label="Guardar" [loading]="$loading()" [disabled]="form.invalid" />
+    </div>
+  </form>
+</div>
