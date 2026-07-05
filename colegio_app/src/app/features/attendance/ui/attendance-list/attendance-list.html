@@ -1,0 +1,50 @@
+<p-toast />
+
+<div class="page-header">
+  <h2>Asistencia</h2>
+  @if (!authState.$isPadre()) {
+    <p-button label="Pasar asistencia hoy" icon="pi pi-check-square" (onClick)="markBulkToday()" />
+  }
+</div>
+
+<div class="card-container">
+  <form [formGroup]="filterForm" class="filter-bar">
+    <p-select
+      formControlName="studentId"
+      [options]="$students()"
+      optionLabel="lastName"
+      optionValue="id"
+      placeholder="Filtrar por alumno"
+      [showClear]="true"
+      styleClass="filter-select"
+    />
+    <p-datepicker formControlName="date" [showIcon]="true" dateFormat="dd/mm/yy" placeholder="Fecha" />
+    <p-button label="Buscar" icon="pi pi-search" (onClick)="load()" />
+  </form>
+
+  <p-table [value]="$records()" [loading]="$loading()" styleClass="p-datatable-striped" [paginator]="true" [rows]="20">
+    <ng-template #header>
+      <tr>
+        <th>Alumno</th>
+        <th>Fecha</th>
+        <th>Turno</th>
+        <th>Tipo</th>
+        <th>Estado</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-r>
+      <tr>
+        <td>{{ r.student?.lastName }}, {{ r.student?.firstName }}</td>
+        <td>{{ r.date }}</td>
+        <td>{{ r.turno }}</td>
+        <td>{{ r.tipo }}</td>
+        <td>
+          <p-tag [value]="r.status" [severity]="getStatusSeverity(r.status)" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr><td colspan="5" class="text-center p-4">No hay registros de asistencia.</td></tr>
+    </ng-template>
+  </p-table>
+</div>
