@@ -1,0 +1,34 @@
+<p-toast />
+<div class="page-header">
+  <h2>{{ $editId() ? 'Editar' : 'Nuevo' }} Grado</h2>
+</div>
+<div class="card-container form-container">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-grid">
+      <div class="field">
+        <label>Nombre del Grado *</label>
+        <input pInputText formControlName="name" class="w-full" placeholder="Ej: 1er Grado" />
+      </div>
+      <div class="field">
+        <label>Sección *</label>
+        <input pInputText formControlName="section" class="w-full" placeholder="Ej: A" />
+      </div>
+      <div class="field">
+        <label>Tutor</label>
+        <p-select formControlName="tutorId" [options]="$teachers()" optionLabel="fullName" optionValue="id" placeholder="Sin tutor asignado" [showClear]="true" styleClass="w-full" />
+      </div>
+      <div class="field">
+        <label>Color</label>
+        <div class="color-grid">
+          @for (c of colorOptions; track c) {
+            <span class="color-swatch" [style.background]="c" [class.selected]="form.value.color === c" (click)="form.patchValue({color: c})"></span>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" (onClick)="cancel()" />
+      <p-button type="submit" label="Guardar" [loading]="$loading()" [disabled]="form.invalid" />
+    </div>
+  </form>
+</div>

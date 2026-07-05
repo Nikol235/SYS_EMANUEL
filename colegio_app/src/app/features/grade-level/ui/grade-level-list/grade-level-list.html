@@ -1,0 +1,46 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="page-header">
+  <h2>Grados y Secciones</h2>
+  @if (authState.$canManageUsers()) {
+    <p-button label="Nuevo Grado" icon="pi pi-plus" (onClick)="create()" />
+  }
+</div>
+
+<div class="card-container">
+  <p-table [value]="$gradeLevels()" [loading]="$loading()" styleClass="p-datatable-striped" [paginator]="true" [rows]="15">
+    <ng-template #header>
+      <tr>
+        <th>Color</th>
+        <th>Nombre</th>
+        <th>Sección</th>
+        <th>Tutor</th>
+        <th>Alumnos</th>
+        <th>Período</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-gl>
+      <tr>
+        <td><span class="color-dot" [style.background]="gl.color || '#3B82F6'"></span></td>
+        <td>{{ gl.name }}</td>
+        <td>{{ gl.section }}</td>
+        <td>{{ gl.tutor?.fullName || '—' }}</td>
+        <td>{{ gl.memberCount ?? 0 }}</td>
+        <td>{{ gl.period?.name }}</td>
+        <td>
+          <div class="action-buttons">
+            @if (authState.$canManageUsers()) {
+              <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="info" (onClick)="edit(gl)" />
+              <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(gl)" />
+            }
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr><td colspan="7" class="text-center p-4">No hay grados registrados.</td></tr>
+    </ng-template>
+  </p-table>
+</div>
