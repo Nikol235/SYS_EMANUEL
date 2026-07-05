@@ -1,0 +1,62 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="page-header">
+  <h2>Asignaciones Docente-Curso</h2>
+  @if (authState.$canManageUsers()) {
+    <p-button label="Nueva Asignación" icon="pi pi-plus" (onClick)="dialogVisible = true; form.reset()" />
+  }
+</div>
+
+<div class="card-container">
+  <p-table [value]="$items()" [loading]="$loading()" styleClass="p-datatable-striped" [paginator]="true" [rows]="15">
+    <ng-template #header>
+      <tr>
+        <th>Docente</th>
+        <th>Curso</th>
+        <th>Grado/Sección</th>
+        <th>Evaluaciones</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-tc>
+      <tr>
+        <td>{{ tc.teacher?.fullName }}</td>
+        <td><span class="course-badge" [style.background]="tc.course?.color">{{ tc.course?.name }}</span></td>
+        <td>{{ tc.gradeLevel?.name }} {{ tc.gradeLevel?.section }}</td>
+        <td>{{ tc.evalNames }}</td>
+        <td>
+          <div class="action-buttons">
+            @if (authState.$canManageUsers()) {
+              <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(tc)" />
+            }
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr><td colspan="5" class="text-center p-4">No hay asignaciones.</td></tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog header="Nueva Asignación" [(visible)]="dialogVisible" [modal]="true" [style]="{width: '450px'}">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="field">
+      <label>Docente *</label>
+      <p-select formControlName="teacherId" [options]="$teachers()" optionLabel="fullName" optionValue="id" placeholder="Seleccionar docente" styleClass="w-full" />
+    </div>
+    <div class="field">
+      <label>Curso *</label>
+      <p-select formControlName="courseId" [options]="$courses()" optionLabel="name" optionValue="id" placeholder="Seleccionar curso" styleClass="w-full" />
+    </div>
+    <div class="field">
+      <label>Grado/Sección *</label>
+      <p-select formControlName="gradeLevelId" [options]="$gradeLevels()" optionLabel="name" optionValue="id" placeholder="Seleccionar grado" styleClass="w-full" />
+    </div>
+    <div class="dialog-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" (onClick)="dialogVisible = false" />
+      <p-button type="submit" label="Guardar" [disabled]="form.invalid" />
+    </div>
+  </form>
+</p-dialog>
