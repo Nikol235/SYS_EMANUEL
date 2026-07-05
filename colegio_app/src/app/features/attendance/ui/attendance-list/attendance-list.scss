@@ -1,18 +1,4 @@
 .filter-bar { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
 .filter-select { min-width: 200px; }
 
-.status-select {
-  min-width: 140px;
-
-  ::ng-deep .p-select-label {
-    font-weight: 600;
-    color: #fff;
-  }
-  ::ng-deep .p-select-dropdown .p-icon {
-    color: #fff;
-  }
-
-  &.status-presente ::ng-deep .p-select { background: #10B981; border-color: #10B981; }
-  &.status-tardanza ::ng-deep .p-select { background: #F59E0B; border-color: #F59E0B; }
-  &.status-falta ::ng-deep .p-select { background: #EF4444; border-color: #EF4444; }
-}
+.status-buttons { display: flex; gap: 0.35rem; flex-wrap: wrap; }

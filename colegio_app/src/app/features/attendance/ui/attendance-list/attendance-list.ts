@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -16,7 +16,7 @@ import { AuthState } from '../../../../core/auth-state';
 @Component({
   selector: 'app-attendance-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule, ToastModule, SelectModule, DatePickerModule, TagModule],
+  imports: [CommonModule, ReactiveFormsModule, TableModule, ButtonModule, ToastModule, SelectModule, DatePickerModule, TagModule],
   providers: [MessageService],
   templateUrl: './attendance-list.html',
   styleUrl: './attendance-list.scss',
@@ -36,12 +36,6 @@ export class AttendanceList implements OnInit {
     studentId: [null as number | null],
     date: [null as Date | null],
   });
-
-  statusOptions = [
-    { label: 'Presente', value: 'presente' },
-    { label: 'Tardanza', value: 'tardanza' },
-    { label: 'Falta', value: 'falta' },
-  ];
 
   ngOnInit() {
     this.studentApi.getAll().subscribe(s => this.$students.set(s));

@@ -40,15 +40,29 @@
         <td>{{ r.tipo }}</td>
         <td>
           @if (canEditAttendance()) {
-            <p-select
-              [options]="statusOptions"
-              optionLabel="label"
-              optionValue="value"
-              [ngModel]="r.status"
-              (ngModelChange)="updateStatus(r, $event)"
-              styleClass="status-select"
-              [ngClass]="'status-' + r.status"
-            />
+            <div class="status-buttons">
+              <p-button
+                label="Presente"
+                size="small"
+                severity="success"
+                [outlined]="r.status !== 'presente'"
+                (onClick)="updateStatus(r, 'presente')"
+              />
+              <p-button
+                label="Tarde"
+                size="small"
+                severity="warn"
+                [outlined]="r.status !== 'tardanza'"
+                (onClick)="updateStatus(r, 'tardanza')"
+              />
+              <p-button
+                label="Falta"
+                size="small"
+                severity="danger"
+                [outlined]="r.status !== 'falta'"
+                (onClick)="updateStatus(r, 'falta')"
+              />
+            </div>
           } @else {
             <p-tag [value]="r.status" [severity]="getStatusSeverity(r.status)" />
           }
