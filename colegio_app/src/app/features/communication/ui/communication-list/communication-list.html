@@ -1,0 +1,62 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="page-header">
+  <h2>Comunicados</h2>
+  @if (!authState.$isPadre()) {
+    <p-button label="Nuevo Comunicado" icon="pi pi-plus" (onClick)="openDialog()" />
+  }
+</div>
+
+<div class="card-container">
+  <p-table [value]="$items()" [loading]="$loading()" styleClass="p-datatable-striped" [paginator]="true" [rows]="size" [totalRecords]="$totalRecords()">
+    <ng-template #header>
+      <tr>
+        <th>Título</th>
+        <th>Tipo</th>
+        <th>Autor</th>
+        <th>Fecha</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-c>
+      <tr>
+        <td><strong>{{ c.title }}</strong><br><small class="text-muted">{{ c.body | slice:0:80 }}...</small></td>
+        <td><p-tag [value]="c.type" severity="info" /></td>
+        <td>{{ c.author?.fullName }}</td>
+        <td>{{ c.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+          <div class="action-buttons">
+            @if (canEditDelete(c)) {
+              <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(c)" />
+            }
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr><td colspan="5" class="text-center p-4">No hay comunicados.</td></tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog header="Nuevo Comunicado" [(visible)]="dialogVisible" [modal]="true" [style]="{width: '550px'}">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="field">
+      <label>Título *</label>
+      <input pInputText formControlName="title" class="w-full" />
+    </div>
+    <div class="field">
+      <label>Tipo</label>
+      <p-select formControlName="type" [options]="typeOptionsForRole" optionLabel="label" optionValue="value" styleClass="w-full" />
+    </div>
+    <div class="field">
+      <label>Contenido *</label>
+      <textarea pTextarea formControlName="body" rows="5" class="w-full" [autoResize]="true"></textarea>
+    </div>
+    <div class="dialog-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" (onClick)="dialogVisible = false" />
+      <p-button type="submit" label="Publicar" [disabled]="form.invalid" />
+    </div>
+  </form>
+</p-dialog>
