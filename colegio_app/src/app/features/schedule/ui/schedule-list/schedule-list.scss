@@ -1,0 +1,7 @@
+.filter-bar { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.filter-select { min-width: 200px; }
+.subject-badge { color: white; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.span-2 { grid-column: 1 / -1; }
+.field { display: flex; flex-direction: column; gap: 0.5rem; label { font-weight: 500; font-size: 0.875rem; } }
+.dialog-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem; }

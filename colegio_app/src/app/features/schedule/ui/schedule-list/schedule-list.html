@@ -1,0 +1,76 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="page-header">
+  <h2>Horarios</h2>
+  @if (authState.$canManageUsers()) {
+    <p-button label="Nuevo Horario" icon="pi pi-plus" (onClick)="dialogVisible = true; form.reset({color:'#3B82F6'})" />
+  }
+</div>
+
+<div class="card-container">
+  <div class="filter-bar">
+    <p-select [options]="$gradeLevels()" optionLabel="name" optionValue="id" placeholder="Filtrar por grado" [showClear]="true" styleClass="filter-select" (onChange)="$selectedGradeLevel.set($event.value); load()" />
+  </div>
+
+  <p-table [value]="$items()" [loading]="$loading()" styleClass="p-datatable-striped" [paginator]="true" [rows]="20">
+    <ng-template #header>
+      <tr>
+        <th>Día</th>
+        <th>Hora Inicio</th>
+        <th>Hora Fin</th>
+        <th>Materia</th>
+        <th>Grado</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-s>
+      <tr>
+        <td>{{ getDayName(s.dayOfWeek) }}</td>
+        <td>{{ s.startTime }}</td>
+        <td>{{ s.endTime }}</td>
+        <td><span class="subject-badge" [style.background]="s.color || '#3B82F6'">{{ s.subject }}</span></td>
+        <td>{{ s.gradeLevel?.name }} {{ s.gradeLevel?.section }}</td>
+        <td>
+          @if (authState.$canManageUsers()) {
+            <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(s)" />
+          }
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr><td colspan="6" class="text-center p-4">No hay horarios registrados.</td></tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog header="Nuevo Horario" [(visible)]="dialogVisible" [modal]="true" [style]="{width: '500px'}">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-grid">
+      <div class="field">
+        <label>Grado *</label>
+        <p-select formControlName="gradeLevelId" [options]="$gradeLevels()" optionLabel="name" optionValue="id" placeholder="Seleccionar" styleClass="w-full" />
+      </div>
+      <div class="field">
+        <label>Día *</label>
+        <p-select formControlName="dayOfWeek" [options]="dayOptions" optionLabel="label" optionValue="value" placeholder="Seleccionar" styleClass="w-full" />
+      </div>
+      <div class="field">
+        <label>Hora Inicio *</label>
+        <input pInputText formControlName="startTime" class="w-full" placeholder="08:00" />
+      </div>
+      <div class="field">
+        <label>Hora Fin *</label>
+        <input pInputText formControlName="endTime" class="w-full" placeholder="09:00" />
+      </div>
+      <div class="field span-2">
+        <label>Materia *</label>
+        <input pInputText formControlName="subject" class="w-full" placeholder="Matemática" />
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" (onClick)="dialogVisible = false" />
+      <p-button type="submit" label="Guardar" [disabled]="form.invalid" />
+    </div>
+  </form>
+</p-dialog>
