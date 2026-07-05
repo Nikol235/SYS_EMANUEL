@@ -1,0 +1,76 @@
+<p-toast />
+
+<div class="page-header">
+  <h2>Pagos</h2>
+  @if (authState.$canManageUsers()) {
+    <p-button label="Nuevo Pago" icon="pi pi-plus" (onClick)="openCreate()" />
+  }
+</div>
+
+<div class="card-container">
+  @if (!authState.$isPadre()) {
+    <form [formGroup]="filterForm" class="filter-bar">
+      <p-select formControlName="studentId" [options]="$studentOptions()" optionLabel="label" optionValue="value" placeholder="Filtrar por alumno" [showClear]="true" styleClass="filter-select" />
+      <p-button label="Buscar" icon="pi pi-search" (onClick)="load()" />
+    </form>
+  }
+
+  <p-table [value]="$payments()" [loading]="$loading()" styleClass="p-datatable-striped" [paginator]="true" [rows]="15">
+    <ng-template #header>
+      <tr>
+        <th>Alumno</th>
+        <th>Mes</th>
+        <th>Año</th>
+        <th>Monto</th>
+        <th>Estado</th>
+        <th>Fecha de Pago</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-p>
+      <tr [class.paid-row]="p.paid">
+        <td>{{ p.student?.lastName }}, {{ p.student?.firstName }}</td>
+        <td>{{ p.month }}</td>
+        <td>{{ p.year }}</td>
+        <td>S/. {{ p.amount | number:'1.2-2' }}</td>
+        <td>
+          <p-tag [value]="p.paid ? 'Pagado' : 'Pendiente'" [severity]="p.paid ? 'success' : 'warn'" />
+        </td>
+        <td>{{ p.paidDate || '—' }}</td>
+        <td>
+          @if (!p.paid && !authState.$isPadre()) {
+            <p-button icon="pi pi-check" label="Marcar Pagado" [text]="true" severity="success" (onClick)="markPaid(p)" />
+          }
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr><td colspan="7" class="text-center p-4">No hay pagos registrados.</td></tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog header="Nuevo Pago" [(visible)]="createDialogVisible" [modal]="true" [style]="{width: '450px'}">
+  <form [formGroup]="createForm" (ngSubmit)="submitCreate()">
+    <div class="field">
+      <label>Alumno *</label>
+      <p-select formControlName="studentId" [options]="$studentOptions()" optionLabel="label" optionValue="value" placeholder="Seleccionar alumno" styleClass="w-full" [filter]="true" />
+    </div>
+    <div class="field">
+      <label>Mes *</label>
+      <p-select formControlName="month" [options]="monthOptions" optionLabel="label" optionValue="value" placeholder="Seleccionar mes" styleClass="w-full" />
+    </div>
+    <div class="field">
+      <label>Año *</label>
+      <input pInputText type="number" formControlName="year" class="w-full" />
+    </div>
+    <div class="field">
+      <label>Monto (S/.) *</label>
+      <input pInputText type="number" formControlName="amount" step="0.01" class="w-full" />
+    </div>
+    <div class="dialog-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" (onClick)="createDialogVisible = false" />
+      <p-button type="submit" label="Registrar" [disabled]="createForm.invalid" />
+    </div>
+  </form>
+</p-dialog>
