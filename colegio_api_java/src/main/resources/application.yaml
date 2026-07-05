@@ -2,17 +2,20 @@ spring:
   application:
     name: colegio_api
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5434/colegio_db
-    username: postgres
-    password: 123456
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://127.0.0.1:5434/colegio_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    show-sql: ${JPA_SHOW_SQL:true}
 
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 jwt:
-  secret: unaClaveSecretaMuyLargaDeAlMenos32Caracteres123456
-  expiration: 86400000
+  secret: ${JWT_SECRET:unaClaveSecretaMuyLargaDeAlMenos32Caracteres123456}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}
