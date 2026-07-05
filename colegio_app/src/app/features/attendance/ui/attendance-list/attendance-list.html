@@ -39,7 +39,19 @@
         <td>{{ r.turno }}</td>
         <td>{{ r.tipo }}</td>
         <td>
-          <p-tag [value]="r.status" [severity]="getStatusSeverity(r.status)" />
+          @if (canEditAttendance()) {
+            <p-select
+              [options]="statusOptions"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="r.status"
+              (ngModelChange)="updateStatus(r, $event)"
+              styleClass="status-select"
+              [ngClass]="'status-' + r.status"
+            />
+          } @else {
+            <p-tag [value]="r.status" [severity]="getStatusSeverity(r.status)" />
+          }
         </td>
       </tr>
     </ng-template>

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -16,7 +16,7 @@ import { AuthState } from '../../../../core/auth-state';
 @Component({
   selector: 'app-attendance-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TableModule, ButtonModule, ToastModule, SelectModule, DatePickerModule, TagModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule, ToastModule, SelectModule, DatePickerModule, TagModule],
   providers: [MessageService],
   templateUrl: './attendance-list.html',
   styleUrl: './attendance-list.scss',
@@ -79,5 +79,29 @@ export class AttendanceList implements OnInit {
 
   getStatusSeverity(status: string): 'success' | 'warn' | 'danger' {
     return status === 'presente' ? 'success' : status === 'tardanza' ? 'warn' : 'danger';
+  }
+
+  canEditAttendance(): boolean {
+    return !this.authState.$isPadre();
+  }
+
+  updateStatus(record: AttendanceResponse, status: string) {
+    if (record.status === status) return;
+    const previous = record.status;
+    this.$records.update(list => list.map(r => r.id === record.id ? { ...r, status } : r));
+
+    this.attendanceApi.save({
+      studentId: record.student.id,
+      date: record.date,
+      status,
+      turno: record.turno,
+      tipo: record.tipo,
+    }).subscribe({
+      next: () => this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Asistencia actualizada' }),
+      error: () => {
+        this.$records.update(list => list.map(r => r.id === record.id ? { ...r, status: previous } : r));
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar la asistencia' });
+      },
+    });
   }
 }
