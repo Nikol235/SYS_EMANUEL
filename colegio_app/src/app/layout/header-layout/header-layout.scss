@@ -1,0 +1,17 @@
+.app-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--p-primary-color);
+  margin-left: 0.5rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-info {
+  font-size: 0.875rem;
+  color: var(--p-text-muted-color);
+}

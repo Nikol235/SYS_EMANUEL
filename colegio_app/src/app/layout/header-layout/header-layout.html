@@ -1,0 +1,26 @@
+<p-toolbar>
+  <ng-template #start>
+    <p-button
+      icon="pi pi-bars"
+      [rounded]="true"
+      [text]="true"
+      severity="secondary"
+      (onClick)="layoutState.toggleSidebar()"
+    />
+    <span class="app-brand">Colegio Emanuel</span>
+  </ng-template>
+  <ng-template #end>
+    <div class="header-actions">
+      <span class="user-info">{{ authState.$fullName() }}</span>
+      <p-avatar icon="pi pi-user" shape="circle" />
+      <p-button
+        icon="pi pi-sign-out"
+        [rounded]="true"
+        [text]="true"
+        severity="secondary"
+        (onClick)="logout()"
+        pTooltip="Cerrar sesión"
+      />
+    </div>
+  </ng-template>
+</p-toolbar>
