@@ -1,0 +1,42 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="page-header">
+  <h2>Docentes</h2>
+  <p-button label="Registrar Docente" icon="pi pi-plus" (onClick)="create()" />
+</div>
+
+<div class="card-container">
+  <p-table [value]="$teachers()" [loading]="$loading()" styleClass="p-datatable-striped" [paginator]="true" [rows]="15">
+    <ng-template #header>
+      <tr>
+        <th>Nombre Completo</th>
+        <th>Usuario</th>
+        <th>DNI</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-t>
+      <tr>
+        <td>{{ t.fullName }}</td>
+        <td><code>{{ t.username }}</code></td>
+        <td>{{ t.dni }}</td>
+        <td>{{ t.email || '—' }}</td>
+        <td>{{ t.phone || '—' }}</td>
+        <td><p-tag [value]="t.active ? 'Activo' : 'Inactivo'" [severity]="t.active ? 'success' : 'danger'" /></td>
+        <td>
+          <div class="action-buttons">
+            <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="info" (onClick)="edit(t)" />
+            <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(t)" />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr><td colspan="7" class="text-center p-4">No hay docentes registrados.</td></tr>
+    </ng-template>
+  </p-table>
+</div>
