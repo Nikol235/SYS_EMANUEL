@@ -1,0 +1,63 @@
+<p-toast />
+
+<div class="page-header">
+  <h2>Notas</h2>
+  @if (authState.$isDocente() || authState.$isAdmin()) {
+    <p-button label="Registrar Nota" icon="pi pi-plus" (onClick)="dialogVisible = true; gradeForm.reset()" />
+  }
+</div>
+
+<div class="card-container">
+  <form [formGroup]="filterForm" class="filter-bar">
+    <p-select formControlName="studentId" [options]="$students()" optionLabel="lastName" optionValue="id" placeholder="Filtrar por alumno" [showClear]="true" styleClass="filter-select" />
+    <p-select formControlName="teacherCourseId" [options]="$teacherCourses()" optionLabel="course.name" optionValue="id" placeholder="Filtrar por curso" [showClear]="true" styleClass="filter-select" />
+    <p-button label="Buscar" icon="pi pi-search" (onClick)="load()" />
+  </form>
+
+  <p-table [value]="$grades()" [loading]="$loading()" styleClass="p-datatable-striped" [paginator]="true" [rows]="20">
+    <ng-template #header>
+      <tr>
+        <th>Alumno</th>
+        <th>Curso</th>
+        <th>Evaluación</th>
+        <th>Nota</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-g>
+      <tr>
+        <td>{{ g.student?.lastName }}, {{ g.student?.firstName }}</td>
+        <td><span class="course-badge" [style.background]="g.course?.color">{{ g.course?.name }}</span></td>
+        <td>{{ g.evaluationName }}</td>
+        <td><strong>{{ g.score ?? '—' }}</strong></td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr><td colspan="4" class="text-center p-4">No hay notas registradas.</td></tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog header="Registrar Nota" [(visible)]="dialogVisible" [modal]="true" [style]="{width: '420px'}">
+  <form [formGroup]="gradeForm" (ngSubmit)="submit()">
+    <div class="field">
+      <label>Alumno</label>
+      <p-select formControlName="studentId" [options]="$students()" optionLabel="lastName" optionValue="id" placeholder="Seleccionar" styleClass="w-full" />
+    </div>
+    <div class="field">
+      <label>Asignación</label>
+      <p-select formControlName="teacherCourseId" [options]="$teacherCourses()" optionLabel="course.name" optionValue="id" placeholder="Seleccionar" styleClass="w-full" />
+    </div>
+    <div class="field">
+      <label>Nombre Evaluación</label>
+      <p-select formControlName="evaluationName" [options]="['N1','N2','N3','Examen']" placeholder="Seleccionar" styleClass="w-full" />
+    </div>
+    <div class="field">
+      <label>Nota</label>
+      <p-inputnumber formControlName="score" [min]="0" [max]="20" [minFractionDigits]="1" styleClass="w-full" />
+    </div>
+    <div class="dialog-actions">
+      <p-button type="button" label="Cancelar" severity="secondary" (onClick)="dialogVisible = false" />
+      <p-button type="submit" label="Guardar" />
+    </div>
+  </form>
+</p-dialog>
